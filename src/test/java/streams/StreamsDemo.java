@@ -3,7 +3,12 @@ package streams;
 import org.testng.annotations.Test;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import static com.beust.jcommander.Strings.startsWith;
 
 public class StreamsDemo {
 
@@ -298,4 +303,61 @@ public class StreamsDemo {
 
         System.out.println(d);
     }
+
+    @Test
+    public void streamDemo2(){
+
+        Stream.of("Abhiiii","Tuna","Tom","Alto","Adammmm").filter(s->s.length()>4).forEach(s-> System.out.println(s));
+
+        Stream.of("Abhiiii","Tuna","Tom","Alto","Adammmm").filter(s->s.length()>4).limit(1).forEach(s-> System.out.println(s));
+    }
+
+    @Test
+    public void streamMap(){
+
+        ArrayList<String> name = new ArrayList<String>();
+        name.add("Raja");
+        name.add("Nandhan");
+        name.add("Billa");
+
+        Stream.of("Azam","Alam","Torry","Mona","Altaf").filter(s->s.startsWith("A")).sorted().map(s->s.toUpperCase())
+                .forEach(s-> System.out.println(s));
+
+        List<String> names =Arrays.asList("Adam","Mike","Glen","John","Klasen");
+        names.stream().filter(s->s.endsWith("n")).map(s->s.toUpperCase()).forEach(s-> System.out.println(s));
+
+        //To concat to arrays
+
+        Stream<String> newStream =Stream.concat(name.stream(),names.stream());
+//        newStream.forEach(s-> System.out.println(s));
+
+        boolean flag = newStream.anyMatch(s->s.equalsIgnoreCase("Adam"));
+        System.out.println(flag);
+    }
+
+    @Test
+    public void streamCollect() {
+
+        List<String> n = Stream.of("Azam", "Alam", "Torry", "Mona", "Altaf")
+                .filter(s -> s.startsWith("A"))
+                .map(s -> s.toLowerCase())
+                .collect(Collectors.toList());
+
+        System.out.println(n.get(2));
+
+        List<Integer> values = Arrays.asList(1, 5, 9, 3, 4, 6, 8);
+
+        values.stream()
+                .distinct()
+                .forEach(s -> System.out.println(s));
+
+        List<Integer> li = values.stream()
+                .distinct()
+                .sorted()
+                .collect(Collectors.toList());
+
+        System.out.println(li.get(2));
+    }
+
+
 }
